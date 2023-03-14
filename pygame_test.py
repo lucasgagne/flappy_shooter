@@ -158,7 +158,10 @@ def start_screen():
     while run:
         font = pygame.font.SysFont('Times New Roman', 50, True, False) 
         text = font.render("Welcome, press P to start", True, (255, 87, 51)) # in line 48
-        WIN.blit(text, (WIDTH/2 - 250, HEIGHT/2))    
+        WIN.blit(text, (WIDTH/2 - 250, HEIGHT/2))  
+        font = pygame.font.SysFont('Times New Roman', 25, True, False) 
+        text = font.render("Controls: fly with 'w', fire with 'f'", True, (255, 87, 51)) # in line 48
+        WIN.blit(text, (WIDTH/2 - 150, 2*HEIGHT/3))     
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -178,6 +181,8 @@ def gameLoop():
     bird_bullets = []
     enemy_list = []
     TESTENEMY = enemy(1, enemy_list)
+    TESTENEMY.rect.x = WIDTH + 100
+    TESTENEMY.rect.y = HEIGHT / 2
     kill_count = 0
     scroll = 0
     light_list = []
@@ -191,7 +196,6 @@ def gameLoop():
         clock.tick(FPS)
         #GENERATE LIGHTS EVERY 3300 pixels
         if count % 3300 == 0:
-            print("FUCK")
             light_list, images = create_lights(light_list)
         count -= SCROLL_VEL
 
