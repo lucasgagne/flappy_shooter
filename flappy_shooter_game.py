@@ -1,4 +1,3 @@
-#WE NEED TO TRACK WHEN BULLETS HIT WALLS, WE NEED TO TRACK WHEN BIRD HITS WALLS. 
 import pygame
 import os
 pygame.font.init()
@@ -11,7 +10,7 @@ pygame.display.set_caption("Shoota Game")
 
 WHITE = (100, 100, 100)
 FPS = 60
-VEL = 25
+VEL = 20
 BULLET_VEL = 20
 ENEMY_HEIGHT = 70
 ENEMY_WIDTH = 50
@@ -86,6 +85,9 @@ def drawWindow(rect, bird_bullets, kill_count, scroll, enemy_list, light_list, i
         WIN.blit(ENEMY, (enemy.rect.x, enemy.rect.y))
         if enemy.rect.x  <  -5:
             enemy.rect.x = WIDTH + 200
+            for light in light_list:
+                if light.x == enemy.rect.x:
+                    enemy.rect.x -= 50
             enemy.rect.y = random.randint(80, 400)
         if enemy.health == 0:
 
@@ -100,7 +102,7 @@ def drawWindow(rect, bird_bullets, kill_count, scroll, enemy_list, light_list, i
     for wall in light_list:
         if wall.colliderect(rect):
             pygame.event.post(pygame.event.Event(PLAYER_DIE))
-    #Check if bird flew too low
+    #Check if bird flew too low or high 
     if rect.y > (HEIGHT ):
         pygame.event.post(pygame.event.Event(PLAYER_DIE))
 
@@ -115,7 +117,7 @@ def drawWindow(rect, bird_bullets, kill_count, scroll, enemy_list, light_list, i
     
 
 def physics(rect):
-    rect.y += 15
+    rect.y += 10
 
 
 def handle_bullets(bird_bullets, enemy_list, wall_list):
@@ -133,7 +135,7 @@ def handle_bullets(bird_bullets, enemy_list, wall_list):
             
 
 def handle_movement(keys_pressed, rect):
-    if keys_pressed[pygame.K_w] and rect.y > -50: # up
+    if (keys_pressed[pygame.K_w] or keys_pressed[pygame.K_UP]) and rect.y > -40: # up
         rect.y -= VEL
 def display_game_over():
     run = True
@@ -203,7 +205,7 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_f and len(bird_bullets) < MAX_BULLETS:
+                if (event.key == pygame.K_f or event.key == pygame.K_SPACE)and len(bird_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(rect.x + 10, rect.y + 20, BULLET_WIDTH, BULLET_HEIGHT)
                     bird_bullets.append(bullet)
 
